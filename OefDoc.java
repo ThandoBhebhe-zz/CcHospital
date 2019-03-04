@@ -28,6 +28,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.table.TableColumnModel;
 
 public class OefDoc extends JFrame{
 	
@@ -99,39 +100,28 @@ public class OefDoc extends JFrame{
 		});
 		
 	
-	     this.setSize(885,600);
+	     this.setSize(1000,630);
 	     this.setLocationRelativeTo(null);
 	     setVisible(true);
 	     
 	 	 this.setLayout(new BorderLayout());
 	 
-			
-			
-    	  
+
     	    
 	    	try {
-	    	    conn =
-	    	       DriverManager.getConnection("jdbc:mysql://localhost:3309/hospital","root","");
-	    	  
-	    	   
-
-	    	    
+	    	    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+	    	
 	    	    s = conn.createStatement();
 
-	    	
-	    	    
 	    	    if (s.execute("select * from patient;")) {
 	    	        rs = s.getResultSet();
 	    	    }
 
-	    	 
-	    	    
-
-	    	    
+	 
 	    	    int rc = 0;
 	    	    
 	    	    while(rs.next()){
-	    	    
+	    	    //result set fetches data in the data underneath the rows specified
 	    	    	String id = rs.getString("id");
 					data[rc][0]=id;
 					
@@ -156,10 +146,8 @@ public class OefDoc extends JFrame{
 					String cr = rs.getString("call_records");
 					data[rc][7]= cr;
 					
-					
-	    	    	
-	    	    	
-	    	         rc++;    
+					//incrementing row counter to go to the next line
+	    	        rc++;    
 	    	        
 	        	    
 	    	        
@@ -173,19 +161,32 @@ public class OefDoc extends JFrame{
 	    	}
 	    	
 	    	
-	    	String [] cn = {"ID","Firtname","Lastname","DOB","Address","PhoneNum","Meds","Call Records"};
+	    	String [] cn = {"ID","Firstname","Lastname","DOB","Address","PhoneNum","Meds","Call Records"};
 	    	
 	    	///////////////////////////////////////////////////
 	    	
 	    	JTable table = new JTable(data, cn);
+	    	TableColumnModel tcm = table.getColumnModel();
+	    	
+	    	tcm.getColumn(0).setPreferredWidth(50);
+	    	System.out.println("Trying to set width");
+	    	tcm.getColumn(1).setPreferredWidth(50);
+	    	tcm.getColumn(2).setPreferredWidth(40);
+	    	tcm.getColumn(3).setPreferredWidth(50);
+	    	tcm.getColumn(4).setPreferredWidth(50);
+	    	tcm.getColumn(5).setPreferredWidth(50);
+	    	tcm.getColumn(6).setPreferredWidth(50);
+	    	tcm.getColumn(7).setPreferredWidth(50);
+	    	
+	    	
 	    	
 	    	JScrollPane js=new JScrollPane(table);
 	    	table.addMouseListener(new MouseAdapter(){
+	    		
 	    		public void mouseClicked(MouseEvent mc){
 	    			
 	    			int row = table.getSelectedRow();
 	    			String TID =(table.getModel().getValueAt(row, 0).toString());
-	    			
 	    			
 	    			try{
 	    				
@@ -193,40 +194,34 @@ public class OefDoc extends JFrame{
 	    				rs = s.executeQuery("select * from patient where id='"+TID+"'");
 	    				
 	    				while(rs.next()){
+	    					
 	    					idjtf.setText(rs.getString(1));
 	    					fnjtf.setText(rs.getString(2));
-	    					lnjtf.setText(rs.getString(3));;
-	    					dobjtf.setText(rs.getString(4));;
-	    					addjtf.setText(rs.getString(5));;
+	    					lnjtf.setText(rs.getString(3));
+	    					dobjtf.setText(rs.getString(4));
+	    					addjtf.setText(rs.getString(5));
 	    					pnjtf.setText(rs.getString(6));
 	    					
-	    					
-	    					
-	    					
-	    					medjtf.setText(rs.getString(7));;
-	    					crjta.setText(rs.getString(9));;
-	    					
-	  
+	    					medjtf.setText(rs.getString(7));
+	    					crjta.setText(rs.getString(9));
+	    					System.out.println("priting line");
 	    				}
 	    				
 	    			}catch(Exception tab){
-	    				
+	    				System.out.println("Something went wrong with fetching the data from the database");
 	    			}
 	    		}
 	    		
 	    	});
 	    	
-	         left.add(js);
+	        left.add(js);
 	         
-	    
+	        this.add(bottom, BorderLayout.SOUTH);
 	         
-	         
-	         this.add(bottom, BorderLayout.SOUTH);
-	         
-	         this.add(left, BorderLayout.WEST);
+	        this.add(left, BorderLayout.WEST);
 	       
 	         
-	         JPanel jp = new JPanel();
+	        JPanel jp = new JPanel();
 	 		jp.setBorder(BorderFactory.createLineBorder(Color.black));
 	 		this.add(jp);
 	 		
@@ -503,7 +498,7 @@ public class OefDoc extends JFrame{
 		this.setVisible(false);
 		Oefen eofen = new Oefen();
 		eofen.setVisible(true);
-		}
+	}
 
 	 
 

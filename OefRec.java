@@ -105,7 +105,7 @@ public class OefRec extends JFrame {
     	  
     	    
 	    	try {
-	    	    conn = DriverManager.getConnection("jdbc:mysql://localhost:3309/hospital","root","");
+	    	    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
 	    	   
 
 	    	    

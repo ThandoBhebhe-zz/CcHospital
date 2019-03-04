@@ -1,4 +1,5 @@
 import javax.swing.JMenuBar;
+
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
@@ -11,6 +12,7 @@ import javax.swing.JButton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,8 +35,6 @@ public class Oefen extends JFrame{
     
     String username;
     String password;
-    
-   
 	
 	public String getUsername(String username) {
 		return username;
@@ -47,20 +47,14 @@ public class Oefen extends JFrame{
 	public static void main(String[]args){
 		try {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	
-	
-		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		new Oefen();
-		
-	
 	}
 	
 	//Default constructor
 	public Oefen(){
-		
 		
 		connect();
 		gui();
@@ -73,7 +67,7 @@ public class Oefen extends JFrame{
 		setTitle("CiCELL HOSPITAL");
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		setSize(380,127);
+		setSize(500,150);
 		this.setLocationRelativeTo(null);
 		
 		//JMenuBar complete//////////////////////
@@ -86,8 +80,6 @@ public class Oefen extends JFrame{
 		
 		JMenuItem save = new JMenuItem("Save");
 		fileOption.add(save);
-	
-		
 		
 		//BorderLayout, Buttons Panels/////////////////
 		this.setLayout(new BorderLayout());
@@ -108,6 +100,7 @@ public class Oefen extends JFrame{
 			}
 			
 		});
+		
 		//textField, adding JPanels etc
 		jp.add(jb);
 		this.add(jp,BorderLayout.PAGE_END);
@@ -135,16 +128,16 @@ public class Oefen extends JFrame{
 				
 				int choice = JOptionPane.showConfirmDialog(null, 
 						   "Are you sure you wish to exit application?",null, JOptionPane.YES_NO_OPTION);
-						if(choice == JOptionPane.YES_OPTION) {
+					if(choice == JOptionPane.YES_OPTION) {
 						    System.exit(0);
-						}
+					}
 				
 			}
 		
 			
 		});
 		
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);       
 		this.repaint();
 		this.validate();
 	}
@@ -152,12 +145,17 @@ public class Oefen extends JFrame{
 	//CONNECTION METHOD///////////////////
 	public void connect(){
 		try{
-			conn=DriverManager.getConnection("jdbc:mysql://localhost:3309/hospital","root","");
-			JOptionPane.showMessageDialog(this, "                 Connection Succesful...","SUCCESS",JOptionPane.PLAIN_MESSAGE);
+			Class.forName("com.mysql.jdbc.Driver");
+			
+			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+			JOptionPane.showMessageDialog(this, "Connection Succesful...","SUCCESS",JOptionPane.PLAIN_MESSAGE);
 			this.setVisible(true);
-		}catch(SQLException e){
+			
+		}catch(Exception e){
+			
 			JOptionPane.showMessageDialog(this, "Error Connecting to database: Contact IT","Connection Error",JOptionPane.ERROR_MESSAGE);
-			this.setVisible(false);
+			System.out.println(e);//printing error to console
+			this.setVisible(true);
 			//e.printStackTrace();
 			if(e.equals("Communications link failure The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.")){
 				//JOptionPane.showMessageDialog(this, "Error Connecting to database: turn on xammp ","Connection Error",JOptionPane.ERROR_MESSAGE);
@@ -180,15 +178,12 @@ public class Oefen extends JFrame{
 		ps = conn.prepareStatement("select * from users where username =? and password = ?");
 		
 		ps.setString(1, uni);
-		
-		
-		
+	
 		ps.setString(2, upi);
 		//System.out.println(upi+uni);
 		
 		rs = ps.executeQuery();
 		int count = 0;
-		
 		
 		while(rs.next()){
 			
@@ -203,9 +198,8 @@ public class Oefen extends JFrame{
 			 *  
 			 *  after asked for credentials again it would now return the userid as null which wasnt of use...
 			 *  
-			 * this was so i could use an sql statement to UPDATE table and set the calls to whatver they type in
+			 * this was so i could use an sql statement to UPDATE table and set the calls to whatever they type in
 			 * call records WHERE the userid is whatever theyre userID was
-			 * Couldnt get it to work out
 			*/
 			//System.out.println("user id is"+userid);
 			count++;
@@ -214,7 +208,6 @@ public class Oefen extends JFrame{
 			//checking if the user exists in the database and only once
 			if(count == 1){
 				JOptionPane.showMessageDialog(this, "LOGGIN IN","CORRECT DETAILS",JOptionPane.PLAIN_MESSAGE);
-			
 			
 				if (type.equals("doctor")){
 					OefDoc docs = new OefDoc();
@@ -229,9 +222,7 @@ public class Oefen extends JFrame{
 				}else if(type.equals("biller")){
 					OefBill oefbill = new OefBill();
 					oefbill.setVisible(true);
-					
-					
-					
+				
 				}
 			
 			this.setVisible(false);
@@ -248,23 +239,16 @@ public class Oefen extends JFrame{
 			
 			//checking if user exits more then once
 			}else if(count > 1){
-				JOptionPane.showMessageDialog(this, "USER EXITS MORE THAN ONCE IN THE DATABASE, CONTACT IT FOR SUPPORT","DUPLICATE USER",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "USER EXISTS MORE THAN ONCE IN THE DATABASE, CONTACT IT FOR SUPPORT","DUPLICATE USER",JOptionPane.ERROR_MESSAGE);
 			
 			//wrong details
 			}else {
+				//UIManager.put("OptionPane.minimumSize", new Dimension(500,100));
 				JOptionPane.showMessageDialog(this, "ENTER CORRECT DETAILS","WRONG DETAILS",JOptionPane.ERROR_MESSAGE);
 			}
 		
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		
-
 	}
-	
-		
-	 
-	
-	
-	
 }

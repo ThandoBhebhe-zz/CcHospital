@@ -107,7 +107,7 @@ public class OefPat extends JFrame {
     	    
 	    	try {
 	    	    conn =
-	    	       DriverManager.getConnection("jdbc:mysql://localhost:3309/hospital","root","");
+	    	       DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
 	    	  
 	    	   
 

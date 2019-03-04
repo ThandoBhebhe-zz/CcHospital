@@ -37,15 +37,12 @@ public class printout extends JFrame {
 	ResultSet rs = null;
 	ResultSet rs1= null;
 	
-	
 
 	JPanel top = new JPanel();
 	JPanel bottom = new JPanel();
 	JPanel left = new JPanel();
 	JPanel right = new JPanel();
 	
-	 
- 
 	
 	public printout(){
 		
@@ -60,9 +57,6 @@ public class printout extends JFrame {
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		
-	 	
-		 
-		
 		//exit button
 		JButton exit = new JButton("EXIT");
 		bottom.add(exit);
@@ -71,9 +65,9 @@ public class printout extends JFrame {
 				
 				int choice = JOptionPane.showConfirmDialog(null, 
 						   "Are you sure you wish to exit application?","FINAL CHECK", JOptionPane.YES_NO_OPTION);
-						if(choice == JOptionPane.YES_OPTION) {
-						    System.exit(0);
-						}
+					if(choice == JOptionPane.YES_OPTION) {
+					    System.exit(0);
+					}
 				
 			}
 			
@@ -87,28 +81,15 @@ public class printout extends JFrame {
 	     
 	 	 this.setLayout(new BorderLayout());
 	 
-			
-			
-    	  
     	    
 	    	try {
-	    	    conn =
-	    	       DriverManager.getConnection("jdbc:mysql://localhost:3309/hospital","root","");
-	    	  
-	    	   
-
-	    	    
+	    	    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+	    	 
 	    	    s = conn.createStatement();
-
-	    	
 	    	    
 	    	    if (s.execute("select * from patient;")) {
 	    	        rs = s.getResultSet();
 	    	    }
-
-	    	 
-	    	    
-
 	    	    
 	    	    int rc = 0;
 	    	    
@@ -139,11 +120,8 @@ public class printout extends JFrame {
 					data[rc][7]= price;
 					 
 					
-					
 	    	         rc++;    
-	    	        
-	        	    
-	    	        
+	    	       
 	    	    } 
 	    	   
 	    	} catch (SQLException ex) {
@@ -162,25 +140,16 @@ public class printout extends JFrame {
 	    	
 	         left.add(js);
 	         
-	    
-	         
 	         
 	         this.add(bottom, BorderLayout.SOUTH);
 	         
 	         this.add(left, BorderLayout.WEST);
 	       
 	         
-	        
-			 
-	         
 	     validate();
 	     repaint();
 	     
 	}
-	
- 
-
-
 	
 	
 }
